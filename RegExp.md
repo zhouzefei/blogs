@@ -99,7 +99,7 @@ console.log(str.match(/\w{2,3}?/g))  // ["hi", "my", "fr", "ie", "nd"]
 | \$ |  结尾 |   
 |(?:)|本身不被消费，避免内存浪费| `'zfzff'.replace(/(\w*)(?:ff)/,'$1,$2')` zfz,$2![Alt text](./images/regexp/2.png)|
 |(?=)|匹配表达式 前面的位置| 'abc'.replace(/\B(?=bc)/g,'#') = "a#bc"|
-|(?!)|匹配不是表达式 前面的位置|'abc'.replace(/\B(?!bc)/g,'#') = ab#c，理论上这边应该是ab#c# |
+|(?\!)|匹配不是表达式 前面的位置|'abc'.replace(/\B(?\!bc)/g,'#') = ab#c，理论上这边应该是ab#c# |
 |(?<=)|匹配表达式后面的位置| 'abc'.replace(/(?<=bc)/g,'#') = abc# |
 |(?<\!)|匹配不是表达式后面的位置| 'abc'.replace(/\B(?<\!bc)/g,'#') a#b#c  |
 
