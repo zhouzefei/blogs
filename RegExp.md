@@ -8,24 +8,24 @@
 
 可能最开始看到这个题的时候，第一想法是字符串解析如下：
 ```javascript
-	function transfer(str){
-		return Array.prototype.map.call(str,(v,i)=>{
-	      if(v.charCodeAt(0)<90 && i > 0){
-	        v = ` ${v.toLowerCase()}`
-	      }
-	      return v
-	    }).join('')
-	}
-	console.log(transfer('LetUsToStudyRegexpTogether'))
+function transfer(str){
+    return Array.prototype.map.call(str,(v,i)=>{
+        if(v.charCodeAt(0)<90 && i > 0){
+            v = ` ${v.toLowerCase()}`
+        }
+        return v
+    }).join('')
+}
+console.log(transfer('LetUsToStudyRegexpTogether'))
 ```
 那看下用正则的方式：
 ```javascript
-	function transfer(str){
-	  	return str.replace(/\B([A-Z])/g,(i)=>{
-	      	return ` ${i.toLowerCase()}`;       
-	    })
-	}
-	console.log(transfer('LetUsToStudyRegexpTogether'))
+function transfer(str){
+    return str.replace(/\B([A-Z])/g,(i)=>{
+        return ` ${i.toLowerCase()}`;       
+    })
+}
+console.log(transfer('LetUsToStudyRegexpTogether'))
 ```
 
 正则明显简练很多，我们把 `/\B([A-Z])/g` 放入上述的网站中可以看到它的含义：<b>不在边界的大写字符</b>
@@ -130,7 +130,7 @@ console.log(str.match(/\w{2,3}?/g))  // ["hi", "my", "fr", "ie", "nd"]
 - 千分位，将 123456789.00 转换成 123,456,789.00
 	```javascript
 	function transfer(str){
-	  	return str.replace(/(\d{1,3})(?=(\d{3})+(?:$|\.))/g, "$1,")
+        return str.replace(/(\d{1,3})(?=(\d{3})+(?:$|\.))/g, "$1,")
 	}
 	console.log(transfer('12345678.00'))
 	```
