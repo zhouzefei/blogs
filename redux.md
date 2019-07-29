@@ -151,8 +151,9 @@ if (typeof enhancer !== 'undefined') {
     return enhancer(createStore)(reducer, preloadedState) 
 }
 ```
-结合上面实际例子来看
+
 ```javascript
+// 将上面的demo中间件模块稍微拓展一下
 export default function thunkMiddleware({ dispatch, getState }) {
   return next => action =>
     typeof action === 'function' ? action(dispatch, getState) : next(action);
