@@ -129,6 +129,7 @@ nextStateForKey !== previousStateForKey
 
 - enhancer
 ```javascript
+// 传了多个enhancers将他们组合成一个函数
 if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
@@ -138,6 +139,7 @@ if (
     'createStore(). This is not supported. Instead, compose them ' +
     'together to a single function.')
 }
+// 如果preloadedState是个方法enhancer为undefined则将preloadedState赋值给enhancer
 if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
     enhancer = preloadedState
     preloadedState = undefined
@@ -146,6 +148,67 @@ if (typeof enhancer !== 'undefined') {
     if (typeof enhancer !== 'function') {
         throw new Error('Expected the enhancer to be a function.')
     }
-    return enhancer(createStore)(reducer, preloadedState)
+    return enhancer(createStore)(reducer, preloadedState) 
+}
+```
+结合上面实际例子来看
+```javascript
+export default function thunkMiddleware({ dispatch, getState }) {
+  return next => action =>
+    typeof action === 'function' ? action(dispatch, getState) : next(action);
+}
+const middlewares = [thunkMiddleware]
+createStore(reducers, applyMiddleware(...middlewares))
+
+// 结合上述实例
+// 即enhancer =  applyMiddleware(...middlewares) 
+// enhancer(createStore)(reducer, preloadedState) = applyMiddleware(...middlewares)(createStore)(reducer, preloadedState)
+// applyMiddleware，看下applyMiddleware.js源码 如下
+
+ export default function applyMiddleware(...middlewares) { // 中间件middlewares
+  return createStore => (...args) => {
+    const store = createStore(...args) // 创建一个store
+    // 自定义dispatch函数，在构造middleware的时候，不允许调用dispatch
+    let dispatch = () => {
+      throw new Error(
+        'Dispatching while constructing your middleware is not allowed. ' +
+          'Other middleware would not be applied to this dispatch.'
+      )
+    }
+    const middlewareAPI = {
+      getState: store.getState,
+      dispatch: (...args) => dispatch(...args)
+    }
+    // 传入getState/dispatch到middleware中 生成 next => action => {} 
+    const chain = middlewares.map(middleware => middleware(middlewareAPI)) 
+    // 自定义的dispatch更新为多个middleware的组合函数；
+    // 传入store原本dispatch函数给组合函数（会在最后一个middle中作为next函数）形成一个链式
+    dispatch = compose(...chain)(store.dispatch) 
+
+    // 返回store，dispatch已经是middleware的组合函数
+    return {
+      ...store,
+      dispatch
+    }
+  }
+}
+
+
+// compose 源码
+// 从右到左组合单参数函数。最右边的函数可以接受多个参数，例如，compose(f，g，h)(...args）=>f( g( h(...args ) ) )
+export default function compose(...funcs) {
+    if (funcs.length === 0) {
+        return arg => arg
+    }
+
+    if (funcs.length === 1) {
+        return funcs[0]
+    }
+
+    // reduce方法可以得出 a(累加器), b(当前值) 返回a(b(...args))
+    // 结合applyMiddleware中
+    // a = next => action => {}， next = b(...args)就是下一个middleware的 ation => {} 函数。
+    // a中做了自定义的操作，会调用b，b调用c···最后一个调用store.dispatch。
+    return funcs.reduce( (a, b) => (...args) => a( b(...args) ) )
 }
 ```
