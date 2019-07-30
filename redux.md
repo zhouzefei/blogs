@@ -115,7 +115,7 @@ const nextStateForKey = reducer(previousStateForKey, action)
 
 nextStateForKey !== previousStateForKey
 
-如果直接`return Object.assign( state, { otherInfo: { name: 'abc' } } );` 即修改了previousStateForKey，虽然有一层Object.assign浅拷贝，但是对于多层的则会出现问题。 后续的 `hasChanged` 拿不到正确的值。。
+// 如果直接`return Object.assign( state, { otherInfo: { name: 'abc' } } );` 即修改了previousStateForKey，虽然有一层Object.assign浅拷贝，但是对于多层的则会出现问题。 后续的 `hasChanged` 拿不到正确的值。。
 ```
 总结：
 
