@@ -4,9 +4,9 @@ Redux
 
 ![Alt text](./images/redux/1.png)
 
-<pre>
+
 从图中我们大致了解：redux核心方法createStore 接受三个参数 reducer,  preloadedState,  enhancer，经过一些处理生成一些常用的api，如 dispatch,  subscribe,  getState,  replaceReducer。
-</pre>
+
 <br/>
 
 ### 来个简单的demo🌰：
@@ -49,10 +49,10 @@ export default function createStore(reducer, preloadedState, enhancer) {
 ```
 
 - 参数一：reducer
-<pre>
+
 从实例中， reducer = combineReducers({ sign, order, })。
 combineReducers 方法定义在 combineReducers.js
-</pre>
+
 核心代码如下：
 ```javascript
 export default function combineReducers(reducers) {
