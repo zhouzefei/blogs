@@ -213,3 +213,108 @@ export default function compose(...funcs) {
     return funcs.reduce( (a, b) => (...args) => a( b(...args) ) )
 }
 ```
+
+------
+> 出参（getState， subscribe，dispatch，replaceReducer）
+
+1. getState 获取store中的state，因为是只读的，所以得通过这个方法去获取
+```javascript
+function getState() {
+    // 如果正在dispatch，说明state正在计算中，现在的state是旧的为了确保用户能获取最新的
+    // state，所以需要加一个判断，如果正在dispatch则抛出错误，反之则返回现在的state
+    if (isDispatching) {
+      throw new Error(
+        'You may not call store.getState() while the reducer is executing. ' +
+          'The reducer has already received the state as an argument. ' +
+          'Pass it down from the top reducer instead of reading it from the store.'
+      )
+    }
+    return currentState
+}
+
+```
+
+
+2. subscribe 监听state变化
+```javascript
+// 订阅store变化，这里可能有个疑惑 redux都没使用这个监听state变化的函数 直接利用reducer返回一个新的state 就组件就发生变化
+// 这是因为一般项目中react-redux帮我们做了这件事。不需要自己去subscribe全局state的变化，以及去getState https://github.com/reduxjs/react-redux/blob/master/src/utils/Subscription.js#L69 。
+function subscribe(listener) {
+    // listener 是state变化的回调所以必须是个方法
+    if (typeof listener !== 'function') {
+      throw new Error('Expected the listener to be a function.')
+    }
+    // 如果正在dispatch则报错，state在变化的时候需要保证监听器也是新的
+    if (isDispatching) {
+      throw new Error(
+        'You may not call store.subscribe() while the reducer is executing. ' +
+          'If you would like to be notified after the store has been updated, subscribe from a ' +
+          'component and invoke store.getState() in the callback to access the latest state. ' +
+          'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.'
+      )
+    }
+    let isSubscribed = true // 防止重复取消监听
+    // 在每次“dispatch（）”调用之前，对订阅进行快照。如果在调用侦听器时订阅或取消订阅，则对当前正在进行的“dispatch（）”没有任何影响
+    ensureCanMutateNextListeners() // 生成一个简单的当前侦听器副本
+    nextListeners.push(listener)
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return
+      }
+      if (isDispatching) {
+        throw new Error(
+          'You may not unsubscribe from a store listener while the reducer is executing.... '
+        )
+      }
+      isSubscribed = false
+      ensureCanMutateNextListeners()
+      const index = nextListeners.indexOf(listener)
+      nextListeners.splice(index, 1)
+      currentListeners = null
+    }
+  }
+```
+
+3. dispatch 通过dispatch发送action给reducer，reducer根据action和currentState，计算新的state
+```javascript
+function dispatch(action) {
+    // 简单的例子
+    // dispatch({
+    //    type: 'CARINLIB_INIT'
+    // })
+    if (!isPlainObject(action)) {
+      throw new Error(
+        'Actions must be plain objects. ' +
+          'Use custom middleware for async actions.'
+      )
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error(
+        'Actions may not have an undefined "type" property. ' +
+          'Have you misspelled a constant?'
+      )
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.')
+    }
+
+    try {
+      isDispatching = true
+      currentState = currentReducer(currentState, action) // 通过reducer计算新的state
+    } finally {
+      isDispatching = false
+    }
+
+    const listeners = (currentListeners = nextListeners)
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i]  
+      listener() // 执行回调
+    }
+
+    return action
+  }
+```
+
+#### 有不足之处望指正🙏！
