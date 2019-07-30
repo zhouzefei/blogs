@@ -1,4 +1,5 @@
 #### 没事写写文章，喜欢的话请点star
+![Alt text](./images/1.png)
 
 #### 基础篇
 1. [《RegExp》](./RegExp.md "学习RegExp")
