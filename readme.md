@@ -1,4 +1,4 @@
-#### 静心学习之
+#### 没事写写文章，喜欢的话请点star
 
 #### 基础篇
 1. [《RegExp》](https://github.com/zhouzefei/blogs/blob/master/RegExp.md "学习RegExp")
