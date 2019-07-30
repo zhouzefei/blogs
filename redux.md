@@ -239,7 +239,8 @@ function getState() {
 2. subscribe 监听state变化
 ```javascript
 // 订阅store变化，这里可能有个疑惑 redux都没使用这个监听state变化的函数 直接利用reducer返回一个新的state 就组件就发生变化
-// 这是因为一般项目中react-redux帮我们做了这件事。不需要自己去subscribe全局state的变化，以及去getState https://github.com/reduxjs/react-redux/blob/master/src/utils/Subscription.js#L69 。
+// 这是因为一般项目中react-redux帮我们做了这件事。不需要自己去subscribe全局state的变化以及去getState。
+// 如果感兴趣可以看下react-redux: https://github.com/reduxjs/react-redux/blob/master/src/utils/Subscription.js#L69 。
 function subscribe(listener) {
     // listener 是state变化的回调所以必须是个方法
     if (typeof listener !== 'function') {
