@@ -50,7 +50,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
 - 参数一：reducer
 
-从实例中， reducer = combineReducers({ sign, order, })。
+从实例中， reducer = combineReducers({ sign, order })。
 combineReducers 方法定义在 combineReducers.js
 
 核心代码如下：
