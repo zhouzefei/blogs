@@ -2,7 +2,7 @@
 ![Alt text](./images/1.png)
 
 #### 基础篇
-1. [《RegExp》](./RegExp.md "学习RegExp")
+1. [《RegExp》](./regExp.md "学习RegExp")
 
 <br/>
 
@@ -11,9 +11,9 @@
 <br/>
 
 #### 源码
-1. [《Redux源码解析》](./Redux.md "学习RegExp")
+1. [《Redux源码解析》](./redux.md "学习RegExp")
 
-2. [《React之Diff》](./ReactDiff.md "学习RegExp")
+2. [《React之Diff》](./reactDiff.md "学习react-diff")
 
 
 <br/>
