@@ -11,9 +11,9 @@
 <br/>
 
 #### 源码
-1. [《Redux源码解析》](./redux.md "学习RegExp")
+1. [《Redux源码解析》](./Redux.md "学习RegExp")
 
-2. [《React之Diff》](./Diff.md "学习RegExp")
+2. [《React之Diff》](./ReactDiff.md "学习RegExp")
 
 
 <br/>
