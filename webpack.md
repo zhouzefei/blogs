@@ -55,7 +55,6 @@ Compilation：对象代表某个版本的资源对应的编译进程。当使用
 2. optimization.splitChunks 例如业务逻辑未提取
    ![Alt text](./images/webpack/zipBefore1.png)
    ![Alt text](./images/webpack/zipBefore2.png)
-   ![Alt text](./images/webpack/zipBefore3.png)
    提取原则：
    - 基础类库：react，react-redux，react-router
    - UI库：antd，antd-icons
@@ -94,7 +93,7 @@ Compilation：对象代表某个版本的资源对应的编译进程。当使用
    ```
    ![Alt text](./images/webpack/zipAfter1.png)
    ![Alt text](./images/webpack/zipAfter2.png)
-   
+
 3. runtimeChunk
    1. 当更改app的时候runtime与组件不会发生变化。main的hash发生变化
    2. 当组件改变是main的hash不变化，组件和runtime发生变化
