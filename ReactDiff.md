@@ -1,6 +1,6 @@
 我们在开发过程中，遇到列表等场景时，常常会看到下面的警告提示：`每个child应该要有一个唯一的key`。
 
-![avatar](https://pic1.zhimg.com/80/v2-494598ea429fdd48d02ef671b44afdf4_720w.png)
+![avatar](./images/diff/warn.png)
 
 > 遇到这种场景，我们可能反手就加上一个索引作为key，那么这个key它是什么？
 
